@@ -1,0 +1,29 @@
+h3{
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 0;
+  padding: 10px;
+}
+.public{
+  display: flex;
+  display: -webkit-flex;
+  color:white;
+  background: #f5f5f5;
+}
+.home-item{
+    width: 30px;
+  height: 50px;
+  line-height: 50px;
+  background: green;
+  margin: 10px;
+  text-align: center;
+}
+.ant-table-thead > tr > th{
+  background: white;
+}
+.search{
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-radius: 2px;
+}
