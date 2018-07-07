@@ -14,7 +14,7 @@ class SlideBar extends React.Component {
       menu : [
         {key:'sub1', icon: 'appstore', menu: '首页',
         children: [
-          {key:'1', url:'/', menu:'home', children: []},
+          {key:'1', url:'/', menu:'文章管理', children: []},
           {key:'2', url:'/about', menu:'about', children: []},
           {key: '3', url: '/form', menu:'form', children: []},
           {key: '4', url: '/echarts', menu:'echarts', children: []}
@@ -56,7 +56,7 @@ class SlideBar extends React.Component {
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['0']}
           mode="inline"
-  
+
         >
           {menuList}
         </Menu>

@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import { Table, Form, Breadcrumb, Icon, Input, Button, Divider } from 'antd'
 import BreadCrumb from '../../components/breadCrumb/breadCrumb.jsx'
+import API from '../../api/api'
 import './home.scss'
 
 const columns = [
@@ -67,7 +68,18 @@ const rowSelection = {
 class WropSearch extends React.Component {
 
   componentDidMount() {
-    this.props.form.validateFields();
+    this.props.form.validateFields()
+    this.initDate()
+  }
+
+  initDate = async () => {
+    try {
+      let result = await API.getArticleList()
+      console.log(result)
+      console.log('------');
+    } catch (err) {
+     console.log(err)
+    }
   }
 
   handleSubmit = (e) => {
