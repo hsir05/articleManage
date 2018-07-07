@@ -27,16 +27,36 @@ class API extends Server{
     }
   }
 
-  /**
-   *  用途：获取文章列表数据
-   *  @url http://localhost:8888/api/article
-   *  返回status为0表示成功
-   *  @method get
-   *  @return {promise}
-   */
   async getArticleList(params = {}){
     try{
       let result = await this.axios('get', '/article', params)
+      if(result && result.status === '0'){
+        return result
+      }else{
+        throw result
+      }
+    }catch(err){
+      throw err
+    }
+  }
+
+  async addArticle(params = {}){
+    try{
+      let result = await this.axios('post', '/article', params)
+      if(result && result.status === '0'){
+        return result
+      }else{
+        throw result
+      }
+    }catch(err){
+      throw err
+    }
+  }
+
+  async delteArticle(params = {}){
+    console.log(params);
+    try{
+      let result = await this.axios('delete', '/article', params)
       if(result && result.status === '0'){
         return result
       }else{
