@@ -10,7 +10,7 @@ function hasErrors(fieldsError) {
 class WropSearch extends React.Component {
   componentDidMount() {
     this.props.form.validateFields()
-
+    console.log(this.props);
   }
 
   handleSubmit = (e) => {
@@ -18,6 +18,7 @@ class WropSearch extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        this.props.getDate({title:values.search})
       }
     });
   }

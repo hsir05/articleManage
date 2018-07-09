@@ -40,12 +40,12 @@ class Home extends React.Component {
   }
 
   componentDidMount () {
-    this.initDate()
+    this.getDate()
   }
 
-  initDate = async () => {
+  getDate = async (values) => {
     try {
-      let result = await API.getArticleList()
+      let result = await API.getArticleList(values)
       this.setState({articleList:result.data})
     } catch (err) {
      console.log(err)
@@ -57,7 +57,7 @@ class Home extends React.Component {
       let result = await API.delteArticle({id:id})
       console.log(result);
       if (result.status === '0') {
-        this.initDate()
+        this.getDate()
       }
     } catch (err) {
      console.log(err)
@@ -70,7 +70,7 @@ class Home extends React.Component {
       <section>
         <BreadCrumb   {...this.state.data} />
         <div style={{background:'white', padding:'15px', paddingTop:'0'}}>
-          <Search />
+          <Search getDate={this.getDate} />
           <Table rowSelection={this.state.rowSelection} columns={this.state.columns} rowKey={'_id'} dataSource={this.state.articleList} />
         </div>
      </section>
