@@ -20,7 +20,6 @@ class Home extends React.Component {
           <Popconfirm title="你确定要删除?" onConfirm={() => this.deleteSel(record._id)}>
             <Button type="danger"  style={{marginRight:'5px'}}>删除</Button>
           </Popconfirm>
-
           <Button type="primary" ><Link to={`/edit/${record._id}`}>修改</Link></Button>
         </p> }
       ],

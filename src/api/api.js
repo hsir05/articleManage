@@ -80,6 +80,20 @@ class API extends Server{
       throw err
     }
   }
+
+  async login(params = {}){
+    console.log(params);
+    try{
+      let result = await this.axios('post', '/users', params)
+      if(result && result.status === '0'){
+        return result
+      }else{
+        throw result
+      }
+    }catch(err){
+      throw err
+    }
+  }
 }
 
 export default new API();

@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import API from '../../api/api'
 
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
@@ -18,15 +19,25 @@ class WrappedLoginApp extends React.Component {
 
   componentDidMount () {}
 
+  login = async (values) => {
+    try {
+      let result = await API.login(values)
+      console.log(result);
+      if (result.status === '0') {
+        this.props.history.push('/')
+        sessionStorage.setItem('login', JSON.stringify(result))
+      }
+    } catch (err) {
+     console.log(err)
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        if (values.userName === 'admin' && values.password === 'admin') {
-          this.props.history.push('/')
-          sessionStorage.setItem('login', JSON.stringify(values))
-        }
+        this.login(values)
       }
     });
   }
@@ -39,14 +50,14 @@ class WrappedLoginApp extends React.Component {
       <section className='login'>
         <Form onSubmit={this.handleSubmit} className="login-form">
           <FormItem>
-            {getFieldDecorator('userName', {
+            {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入你的帐号' }],
             })(
               <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
             )}
           </FormItem>
           <FormItem style={{marginBottom:'6px'}}>
-            {getFieldDecorator('password', {
+            {getFieldDecorator('pwd', {
               rules: [{ required: true, message: '请输入你的密码' }],
             })(
               <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
