@@ -23,6 +23,7 @@ const App = () => {
 
           <Route exact path="/form"  component={ Forms } />
           <Route exact path="/add" component={ Add } />
+          <Route exact path="/edit/:id" component={ Add } />
           <Route exact path="/echarts"  component={ Echarts } />
         </LayOuts>
 

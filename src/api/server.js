@@ -33,7 +33,11 @@ export default class Server {
             return status >= 200 && status < 300;
         }
       }
-      _option.params = params
+      if (method === 'get' || method === 'delete') {
+        _option.params = params
+      } else {
+        _option.data = params
+      }
       axios.request(_option).then(res => {
         resolve(typeof res.data === 'object' ? res.data : JSON.parse(res.data))
       },

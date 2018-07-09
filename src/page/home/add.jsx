@@ -13,7 +13,6 @@ class RegistrationForm extends React.Component {
     super(props)
     this.state = {
       confirmDirty: false,
-      autoCompleteResult: [],
       data: {
         list: [{url:'/', menuName:'首页', icon:''}, {url:null, menuName:'添加', icon:''}],
         btn: {addUrl:'/', btnName: '返回', icon:'left'}
@@ -26,18 +25,38 @@ class RegistrationForm extends React.Component {
       let result = await API.addArticle(values)
       if (result.status === '0') {
         this.setState({articleList:result.data})
-         this.props.history.push('/')
+        this.props.history.push('/')
       }
     } catch (err) {
      console.log(err)
     }
   }
+
+  updateSel = async (values) => {
+    try {
+      let result = await API.updateArticle(values)
+      console.log(result);
+      if (result.status === '0') {
+        this.props.history.push('/')
+      }
+    } catch (err) {
+     console.log(err)
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
-        this.addDate(values)
+        console.log(this.props);
+        if (this.props.match.params.id) {
+          let par = { id:this.props.match.params.id, ...values }
+          console.log(par);
+          this.updateSel(par)
+        } else {
+          this.addDate(values)
+        }
       }
     });
   }
@@ -64,9 +83,7 @@ class RegistrationForm extends React.Component {
   }
 
   render() {
-
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -74,8 +91,8 @@ class RegistrationForm extends React.Component {
         sm: { span: 8 },
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: { span: 20 },
+        sm: { span: 15 },
       },
     };
     const tailFormItemLayout = {
@@ -91,53 +108,131 @@ class RegistrationForm extends React.Component {
       },
     };
 
-    const websiteOptions = autoCompleteResult.map(website => (
-      <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-    ))
-
     return (
       <section >
         <BreadCrumb   {...this.state.data} />
-        <Form onSubmit={this.handleSubmit} className='form-wrop'>
-        <FormItem
-          {...formItemLayout}
-          label="标题"
-          hasFeedback
-        >
-          {getFieldDecorator('title', {
-            rules: [ {
-              required: true, message: '请输入文章标题',
-            }],
-          })(
-            <Input className='form-page' />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="作者"
-          hasFeedback
-        >
-          {getFieldDecorator('auth', {
-            rules: [{ required: true, message: '请输入作者姓名'}],
-          })( <Input className='form-page' /> )}
-        </FormItem>
 
-        <FormItem {...formItemLayout} label="内容" hasFeedback >
-          {getFieldDecorator('content', {
-            rules: [{ required: true, message: '请输入内容'}],
-          })( <TextArea placeholder="请输入内容" className='form-page' autosize={{ minRows: 2, maxRows: 6 }} /> )}
-        </FormItem>
+        <Form onSubmit={this.handleSubmit}  className='form-wrop'>
 
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">保存</Button>
-        </FormItem>
-      </Form>
+          <FormItem {...formItemLayout} label="标题" hasFeedback >
+            {getFieldDecorator('title', {
+              rules: [ { required: true, message: '请输入文章标题'}],
+            })(
+              <Input className='form-page' />
+            )}
+          </FormItem>
+
+          <FormItem {...formItemLayout} label="作者" hasFeedback  >
+            {getFieldDecorator('auth', {
+              rules: [{ required: true, message: '请输入作者姓名'}],
+            })( <Input className='form-page' /> )}
+          </FormItem>
+
+          <FormItem {...formItemLayout} label="内容" hasFeedback >
+            {getFieldDecorator('content', {
+              rules: [{ required: true, message: '请输入内容'}],
+            })( <TextArea placeholder="请输入内容" className='form-page' autosize={{ minRows: 2, maxRows: 6 }} /> )}
+          </FormItem>
+
+          <FormItem {...tailFormItemLayout}>
+            <Button type="primary" htmlType="submit">保存</Button>
+          </FormItem>
+        </Form>
       </section>
 
     )
   }
 }
 
-const FormPage = Form.create()(RegistrationForm);
+const FormPage = Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields);
+  },
+  mapPropsToFields(props) {
+    // console.log('======');
+    // console.log(props)
+    // console.log('--------');
+    // console.log(Form.createFormField({...props}));
+    return {
+      // title: Form.createFormField({...props}),
+      title: Form.createFormField({
+        ...props.title,
+        value: props.title.value,
+      }),
+      auth: Form.createFormField({
+        ...props.auth,
+        value: props.auth.value,
+      }),
+      content: Form.createFormField({
+        ...props.content,
+        value: props.content.value,
+      })
+    }
+  },
+  onValuesChange(_, values) {
+    console.log(values);
+  },
+})(RegistrationForm)
 
-export default FormPage;
+
+class RegistForm extends React.Component {
+  state = {
+    fields: {
+      // title:'',
+      // auth:'',
+      // content:'',
+      title: {
+        value: '',
+      },
+      auth: {
+        value:'',
+      },
+      content:{
+        value: ''
+      }
+    }
+  }
+
+  componentDidMount () {
+    if (this.props.match.params.id) {
+      this.getIdDate({id:this.props.match.params.id})
+    }
+  }
+
+  getIdDate = async (values) => {
+    try {
+      let result = await API.getArticleList(values)
+      let o = {
+        title:{
+          value: result.data.title
+        },
+        auth:{
+          value:result.data.auth
+        },
+        content:{
+          value:result.data.content
+        }
+      }
+      this.setState({fields:o}, () => {
+        console.log(this.state);
+      })
+    } catch (err) {
+     console.log(err)
+    }
+  }
+
+  handleFormChange = (changedFields) => {
+    this.setState(({ fields }) => ({
+      fields: { ...fields, ...changedFields },
+    }));
+  }
+
+  render () {
+    const fields = this.state.fields;
+    return (<div>
+        <FormPage {...fields} {...this.props} onChange={this.handleFormChange} />
+      </div>)
+  }
+}
+
+export default RegistForm;

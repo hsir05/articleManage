@@ -15,7 +15,11 @@ class Home extends React.Component {
         { title: '作者', dataIndex: 'auth', render: text => <a href="javascript:;">{text}</a>},
         { title: '标题', dataIndex: 'title'},
         { title: '添加时间', dataIndex: 'create_at' },
-        { title: '操作', dataIndex: '', create_at: 'x', render: (record) => <p><a href="javascript:; "onClick={this.deleteSel.bind(this, record)}>删除</a> <a href="javascript:;">修改</a></p> }
+        { title: '操作', dataIndex: '', create_at: 'x', render: (record) =>
+        <p>
+          <a href="javascript:; "onClick={this.deleteSel.bind(this, record._id)}>删除</a>
+          <Link to={`/edit/${record._id}`}>修改</Link>
+        </p> }
       ],
       data: {
         list: [{url:'/', menuName:'首页', icon:''}, {url:null, menuName:'home', icon:''}],
@@ -46,10 +50,9 @@ class Home extends React.Component {
     }
   }
 
-  deleteSel = async (record) => {
-    // console.log(record)
+  deleteSel = async (id) => {
     try {
-      let result = await API.delteArticle({id:record._id})
+      let result = await API.delteArticle({id:id})
       console.log(result);
       if (result.status === '0') {
         this.initDate()
