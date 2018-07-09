@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import API from '../../api/api'
 
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 const FormItem = Form.Item;
 import './login.scss'
 
@@ -22,13 +22,15 @@ class WrappedLoginApp extends React.Component {
   login = async (values) => {
     try {
       let result = await API.login(values)
-      console.log(result);
       if (result.status === '0') {
         this.props.history.push('/')
         sessionStorage.setItem('login', JSON.stringify(result))
       }
     } catch (err) {
-     console.log(err)
+      console.log(err)
+      if (err.status === '-1') {
+       message.error(err.msg)
+      }
     }
   }
 

@@ -84,7 +84,7 @@ class API extends Server{
   async login(params = {}){
     console.log(params);
     try{
-      let result = await this.axios('post', '/users', params)
+      let result = await this.axios('post', '/login', params)
       if(result && result.status === '0'){
         return result
       }else{
