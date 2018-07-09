@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import { Table, Icon } from 'antd'
+import { Table, Icon, Button, Popconfirm } from 'antd'
 import BreadCrumb from '../../components/breadCrumb/breadCrumb.jsx'
 import Search from './search.jsx'
 import API from '../../api/api'
@@ -12,13 +12,16 @@ class Home extends React.Component {
     this.state = {
       articleList: [],
       columns: [
-        { title: '作者', dataIndex: 'auth', render: text => <a href="javascript:;">{text}</a>},
         { title: '标题', dataIndex: 'title'},
+        { title: '作者', dataIndex: 'auth', render: text => <a href="javascript:;">{text}</a>},
         { title: '添加时间', dataIndex: 'create_at' },
         { title: '操作', dataIndex: '', create_at: 'x', render: (record) =>
         <p>
-          <a href="javascript:; "onClick={this.deleteSel.bind(this, record._id)}>删除</a>
-          <Link to={`/edit/${record._id}`}>修改</Link>
+          <Popconfirm title="你确定要删除?" onConfirm={() => this.deleteSel(record._id)}>
+            <Button type="danger"  style={{marginRight:'5px'}}>删除</Button>
+          </Popconfirm>
+
+          <Button type="primary" ><Link to={`/edit/${record._id}`}>修改</Link></Button>
         </p> }
       ],
       data: {
