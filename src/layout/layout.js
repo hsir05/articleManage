@@ -24,7 +24,7 @@ class LayOuts extends Component {
           <SlideBar style={{width:'100%'}} />
           <Layout>
             <HeadBar  />
-            <Content style={{background:'white', paddingLeft:'10px', paddingRight:'10px'}}>
+            <Content style={{background:'white', paddingLeft:'10px', paddingRight:'10px', overflowY: 'scroll'}}>
               {this.props.children}
               {/* <Footer style={{background:'#e9e9e9'}}>Footer</Footer> */}
 

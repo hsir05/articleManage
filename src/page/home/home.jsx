@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import { Table, Icon, Button, Popconfirm } from 'antd'
+import { Table, Icon, Button, Popconfirm, Pagination } from 'antd'
 import BreadCrumb from '../../components/breadCrumb/breadCrumb.jsx'
 import Search from './search.jsx'
 import API from '../../api/api'
@@ -11,6 +11,10 @@ class Home extends React.Component {
     super(props)
     this.state = {
       articleList: [],
+      loading: true,
+      total:0,
+      page:1,
+      pageSize:10,
       columns: [
         { title: '标题', dataIndex: 'title'},
         { title: '作者', dataIndex: 'auth', render: text => <a href="javascript:;">{text}</a>},
@@ -44,9 +48,11 @@ class Home extends React.Component {
   }
 
   getDate = async (values) => {
+    this.setState({loading:true})
+    let par = {...values, page:this.state.page, pageSize:this.state.pageSize, sort: 'create_at'}
     try {
-      let result = await API.getArticleList(values)
-      this.setState({articleList:result.data})
+      let result = await API.getArticleList(par)
+      this.setState({articleList:result.data, loading:false, total: result.total})
     } catch (err) {
      console.log(err)
     }
@@ -64,6 +70,22 @@ class Home extends React.Component {
     }
   }
 
+  handlePage(page) {
+    console.log(page)
+    this.setState({page:page}, () => {
+      this.getDate()
+    })
+  }
+
+  itemRender(current, type, originalElement) {
+    if (type === 'prev') {
+      return <a>上一页</a>;
+    } if (type === 'next') {
+      return <a>下一页</a>;
+    }
+    return originalElement;
+  }
+
   render() {
 
     return (
@@ -71,7 +93,8 @@ class Home extends React.Component {
         <BreadCrumb   {...this.state.data} />
         <div style={{background:'white', padding:'15px', paddingTop:'0'}}>
           <Search getDate={this.getDate} />
-          <Table rowSelection={this.state.rowSelection} columns={this.state.columns} rowKey={'_id'} dataSource={this.state.articleList} />
+          <Table rowSelection={this.state.rowSelection} loading={this.state.loading} pagination={false} columns={this.state.columns} rowKey={'_id'} dataSource={this.state.articleList} />
+          <Pagination onChange={this.handlePage.bind(this)} total={this.state.total} itemRender={this.itemRender.bind(this)} style={{textAlign:'right', margin:'10px'}}/>
         </div>
      </section>
     )

@@ -10,7 +10,6 @@ function hasErrors(fieldsError) {
 class WropSearch extends React.Component {
   componentDidMount() {
     this.props.form.validateFields()
-    console.log(this.props);
   }
 
   handleSubmit = (e) => {
@@ -33,7 +32,7 @@ class WropSearch extends React.Component {
            {getFieldDecorator('search', {
              rules: [{ required: false, message: 'Please input your username!' }],
            })(
-             <Input size="default" prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }}  />} placeholder="search" />
+             <Input size="default" prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }}  />} placeholder="请输入文章标题" />
            )}
          </FormItem>
 
