@@ -149,12 +149,7 @@ const FormPage = Form.create({
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
-    // console.log('======');
-    // console.log(props)
-    // console.log('--------');
-    // console.log(Form.createFormField({...props}));
     return {
-      // title: Form.createFormField({...props}),
       title: Form.createFormField({
         ...props.title,
         value: props.title.value,
@@ -178,9 +173,6 @@ const FormPage = Form.create({
 class RegistForm extends React.Component {
   state = {
     fields: {
-      // title:'',
-      // auth:'',
-      // content:'',
       title: {
         value: '',
       },

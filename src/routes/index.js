@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Router, Route, IndexRedirect, Switch, Redirect, BrowserRouter } from 'react-router-dom';
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 
 import LayOuts from '../layout/layout.js'
 
@@ -26,8 +26,7 @@ const App = () => {
           <Route exact path="/edit/:id" component={ Add } />
           <Route exact path="/echarts"  component={ Echarts } />
         </LayOuts>
-
-
+        <Redirect from="*" to="/"></Redirect>
      </Switch>
    </BrowserRouter>
     )
